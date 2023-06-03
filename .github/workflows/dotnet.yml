@@ -1,0 +1,39 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Pulumi CLI Action
+      # You may pin to the exact commit or the version.
+      # uses: pulumi/actions@b8fd87f2cc23aaf9f686fc38db7cd813cc303229
+      uses: pulumi/actions@v4.3.0
+      with:
+          command: up
+          stack-name: dev
+      env:
+        PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+        ARM_CLIENT_ID: ea59fc6c-9244-453f-9722-5557595e236e
+        ARM_SUBSCRIPTION_ID: 469048f1-92af-4c71-a63b-330ec31d2b82
+        ARM_TENANT_ID: 8f18eb27-4f87-4a88-b325-f8e6e7e43486
+        ARM_USE_OIDC: true
