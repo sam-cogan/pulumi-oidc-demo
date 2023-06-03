@@ -1,0 +1,3 @@
+name: pulumi-oidc-demo
+runtime: dotnet
+description: Demo applicaiton for using OIDC with Azure
